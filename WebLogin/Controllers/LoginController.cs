@@ -10,6 +10,14 @@ namespace WebLogin.Controllers
     public class LoginController : Controller
     {
         // GET: Login
+        private string Encrypt_Password(string password)
+        {
+            string pswstr = string.Empty;
+            byte[] psw_encode = new byte[password.Length];
+            psw_encode = System.Text.Encoding.UTF8.GetBytes(password);
+            pswstr = Convert.ToBase64String(psw_encode);
+            return pswstr;
+        }
         public ActionResult Index()
         {
             return View();

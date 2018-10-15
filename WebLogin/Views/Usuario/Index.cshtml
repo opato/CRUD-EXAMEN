@@ -1,4 +1,11 @@
 ﻿@model IEnumerable<WebLogin.Models.Usuario>
+@{
+    Layout = null;
+    if (Session["IdUsuario"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
 
 @{
     Layout = null;
@@ -15,65 +22,72 @@
     <title>Index</title>
 </head>
 <body>
-    <p>
-        @Html.ActionLink("Nuevo usuario", "Agregar", null, new { @class = "btn btn-success" })
-    </p>
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th>
-                    Correo
-                </th>
-                <th>
-                    Usuario
-                </th>
-                <th>
-                    Estatus
-                </th>
-                <th>
-                    Sexo
-                </th>
-                <th>
-                    Fecha Creacion
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-9 col-lg-9">
+                @Html.ActionLink("Nuevo usuario", "Agregar", null, new { @class = "btn btn-success" })
+            </div>
+            <div class="col-md-3 col-lg-3">
+                @Html.ActionLink("Cerrar sesion "+ Session["IdUsuario"], "LogOut","Login",null,new { @class = "btn btn-outline-secondary btn-sm" })
+            </div>
+        </div>
+        <table class="table">
+            <thead class="thead-dark">
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Correo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Usuario1)
-                    </td>
-                    <td>
-                        @{
-                            if ((bool)item.Estatus)
-                            {
-                                <span>Activo</span>
-                            }
-                            else
-                            {
-                                <span>Inactivo</span>
-                            }
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Sexo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FechaCreacion)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Editar", new { id = item.Id }, new { @class = "btn btn-primary" }) |
-                        @Html.ActionLink("Eliminar", "Eliminar", new { id = item.Id }, new { @class = "btn btn-danger", onclick = "return confirm('Estas seguro de eliminar el usuario?');" })
-                    </td>
+                    <th>
+                        Correo
+                    </th>
+                    <th>
+                        Usuario
+                    </th>
+                    <th>
+                        Estatus
+                    </th>
+                    <th>
+                        Sexo
+                    </th>
+                    <th>
+                        Fecha Creacion
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Correo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Usuario1)
+                        </td>
+                        <td>
+                            @{
+                                if ((bool)item.Estatus)
+                                {
+                                    <span>Activo</span>
+                                }
+                                else
+                                {
+                                    <span>Inactivo</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Sexo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaCreacion)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Editar", new { id = item.Id }, new { @class = "btn btn-primary" }) |
+                            @Html.ActionLink("Eliminar", "Eliminar", new { id = item.Id }, new { @class = "btn btn-danger", onclick = "return confirm('Estas seguro de eliminar el usuario?');" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

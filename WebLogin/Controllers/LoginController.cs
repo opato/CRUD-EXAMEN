@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using WebLogin.Models;
@@ -9,14 +11,18 @@ namespace WebLogin.Controllers
 {
     public class LoginController : Controller
     {
-        private string Encrypt_Password(string password)
+        public static string SHA256(string str)
         {
-            string pswstr = string.Empty;
-            byte[] psw_encode = new byte[password.Length];
-            psw_encode = System.Text.Encoding.UTF8.GetBytes(password);
-            pswstr = Convert.ToBase64String(psw_encode);
-            return pswstr;
-        }        // GET: Login
+            SHA256 sha256 = SHA256Managed.Create();
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            byte[] stream = null;
+            StringBuilder sb = new StringBuilder();
+            stream = sha256.ComputeHash(encoding.GetBytes(str));
+            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            return sb.ToString();
+        }
+
+        // GET: Login
         public ActionResult Index()
         {
             return View();
@@ -27,7 +33,7 @@ namespace WebLogin.Controllers
         {
             using (LoginDBEntities db = new LoginDBEntities())
             {
-                userModel.Password = Encrypt_Password(userModel.Password);
+                userModel.Password = SHA256(userModel.Password);
                 var usuarioDet = db.Usuarios.Where(x => x.Usuario1 == userModel.Usuario1 && x.Password == userModel.Password).FirstOrDefault();
                 if(usuarioDet == null)
                 {

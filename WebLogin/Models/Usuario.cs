@@ -30,7 +30,7 @@ namespace WebLogin.Models
         [Required(ErrorMessage ="Contraseña requerida")]
         [DataType(DataType.Password)]
         [DisplayName("Contraseña")]
-        [StringLength(50, MinimumLength = 10, ErrorMessage = "La contraseña deberá ser minimo de 10 caracteres")]
+        [StringLength(260, MinimumLength = 10, ErrorMessage = "La contraseña deberá ser minimo de 10 caracteres")]
         [RegularExpression("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{10,}", ErrorMessage = "La contraseña no es válida")]
         public string Password { get; set; }
 
@@ -38,7 +38,7 @@ namespace WebLogin.Models
         [Compare("Password")]
         [DataType(DataType.Password)]
         [DisplayName("Confirma contraseña")]
-        [StringLength(50, MinimumLength = 10, ErrorMessage = "La contraseña deberá ser minimo de 10 caracteres")]
+        [StringLength(260, MinimumLength = 10, ErrorMessage = "La contraseña deberá ser minimo de 10 caracteres")]
         public string ConfirmaPassword { get; set; }
 
         public Nullable<bool> Estatus { get; set; }

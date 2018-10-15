@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using WebLogin.Models;
@@ -9,14 +11,17 @@ namespace WebLogin.Controllers
 {
     public class UsuarioController : Controller
     {
-        private string Encrypt_Password(string password)
+        public static string SHA256(string str)
         {
-            string pswstr = string.Empty;
-            byte[] psw_encode = new byte[password.Length];
-            psw_encode = System.Text.Encoding.UTF8.GetBytes(password);
-            pswstr = Convert.ToBase64String(psw_encode);
-            return pswstr;
+            SHA256 sha256 = SHA256Managed.Create();
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            byte[] stream = null;
+            StringBuilder sb = new StringBuilder();
+            stream = sha256.ComputeHash(encoding.GetBytes(str));
+            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            return sb.ToString();
         }
+
 
         // GET: Usuario
         public ActionResult Index()
@@ -58,9 +63,10 @@ namespace WebLogin.Controllers
                         return View();
                     }
                     rowUsuario.Estatus = true;
-                    rowUsuario.Password = Encrypt_Password(rowUsuario.Password);
-                    rowUsuario.ConfirmaPassword = Encrypt_Password(rowUsuario.ConfirmaPassword);
+                    rowUsuario.Password = SHA256(rowUsuario.Password);
+                    rowUsuario.ConfirmaPassword = SHA256(rowUsuario.ConfirmaPassword);
                     db.Usuarios.Add(rowUsuario);
+                    db.Configuration.ValidateOnSaveEnabled = false;
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -79,6 +85,7 @@ namespace WebLogin.Controllers
                 using (LoginDBEntities db = new LoginDBEntities())
                 {
                     Usuario usuario = db.Usuarios.Find(id);
+                    usuario.Password = "Pass";
                     return View(usuario);
                 }
             }
@@ -102,8 +109,9 @@ namespace WebLogin.Controllers
                     Usuario usuarioReg = db.Usuarios.Find(rowUsuario.Id);
                     usuarioReg.Correo = rowUsuario.Correo;
                     usuarioReg.Sexo = rowUsuario.Sexo;
-                    usuarioReg.Password = Encrypt_Password(rowUsuario.Password);
-                    usuarioReg.ConfirmaPassword = Encrypt_Password(rowUsuario.Password);
+                    usuarioReg.Password = SHA256(rowUsuario.Password);
+                    usuarioReg.ConfirmaPassword = SHA256(rowUsuario.Password);
+                    db.Configuration.ValidateOnSaveEnabled = false;
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }

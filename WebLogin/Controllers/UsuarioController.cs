@@ -9,6 +9,15 @@ namespace WebLogin.Controllers
 {
     public class UsuarioController : Controller
     {
+        private string Encrypt_Password(string password)
+        {
+            string pswstr = string.Empty;
+            byte[] psw_encode = new byte[password.Length];
+            psw_encode = System.Text.Encoding.UTF8.GetBytes(password);
+            pswstr = Convert.ToBase64String(psw_encode);
+            return pswstr;
+        }
+
         // GET: Usuario
         public ActionResult Index()
         {
@@ -48,7 +57,8 @@ namespace WebLogin.Controllers
                         ModelState.AddModelError("", "Ya existe un usuario con la misma información");
                         return View();
                     }
-
+                    rowUsuario.Password = Encrypt_Password(rowUsuario.Password);
+                    rowUsuario.ConfirmaPassword = Encrypt_Password(rowUsuario.ConfirmaPassword);
                     db.Usuarios.Add(rowUsuario);
                     db.SaveChanges();
                     return RedirectToAction("Index");

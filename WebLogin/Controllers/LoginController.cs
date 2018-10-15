@@ -9,7 +9,6 @@ namespace WebLogin.Controllers
 {
     public class LoginController : Controller
     {
-        // GET: Login
         private string Encrypt_Password(string password)
         {
             string pswstr = string.Empty;
@@ -17,7 +16,7 @@ namespace WebLogin.Controllers
             psw_encode = System.Text.Encoding.UTF8.GetBytes(password);
             pswstr = Convert.ToBase64String(psw_encode);
             return pswstr;
-        }
+        }        // GET: Login
         public ActionResult Index()
         {
             return View();
@@ -28,6 +27,7 @@ namespace WebLogin.Controllers
         {
             using (LoginDBEntities db = new LoginDBEntities())
             {
+                userModel.Password = Encrypt_Password(userModel.Password);
                 var usuarioDet = db.Usuarios.Where(x => x.Usuario1 == userModel.Usuario1 && x.Password == userModel.Password).FirstOrDefault();
                 if(usuarioDet == null)
                 {

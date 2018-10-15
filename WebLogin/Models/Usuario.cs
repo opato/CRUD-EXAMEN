@@ -48,5 +48,6 @@ namespace WebLogin.Models
         public Nullable<System.DateTime> FechaCreacion { get; set; }
 
         public string MensajeDeError { get; set; }
+
     }
 }

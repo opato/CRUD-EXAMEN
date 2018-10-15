@@ -67,22 +67,6 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                @Html.DropDownListFor(model => model.Estatus, new SelectList(
-                                                  new List<Object>{
-                                                       new { value = false , text = "Inactivo"  },
-                                                       new { value = true , text = "Activo"}
-                                                    },
-                                                  "value",
-                                                  "text",
-                                                   2),new { @class="form-control" })
-                                <div class="espacio"></div>
-                            </div>
-                        </div>
-                        <div class="row msgerror">
-                            @Html.ValidationMessageFor(model => model.Estatus)
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
                                 @Html.DropDownListFor(model => model.Sexo, new SelectList(
                                                   new List<Object>{
                                                        new { value = "M" , text = "Masculino"  },

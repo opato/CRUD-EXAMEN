@@ -57,6 +57,7 @@ namespace WebLogin.Controllers
                         ModelState.AddModelError("", "Ya existe un usuario con la misma información");
                         return View();
                     }
+                    rowUsuario.Estatus = true;
                     rowUsuario.Password = Encrypt_Password(rowUsuario.Password);
                     rowUsuario.ConfirmaPassword = Encrypt_Password(rowUsuario.ConfirmaPassword);
                     db.Usuarios.Add(rowUsuario);
@@ -101,8 +102,8 @@ namespace WebLogin.Controllers
                     Usuario usuarioReg = db.Usuarios.Find(rowUsuario.Id);
                     usuarioReg.Correo = rowUsuario.Correo;
                     usuarioReg.Sexo = rowUsuario.Sexo;
-                    usuarioReg.Password = rowUsuario.Password;
-                    usuarioReg.ConfirmaPassword = rowUsuario.Password;
+                    usuarioReg.Password = Encrypt_Password(rowUsuario.Password);
+                    usuarioReg.ConfirmaPassword = Encrypt_Password(rowUsuario.Password);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
